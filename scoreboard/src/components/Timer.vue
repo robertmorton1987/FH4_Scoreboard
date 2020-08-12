@@ -29,7 +29,7 @@ export default {
     data() {
         return {
             timeRemaining: "",
-            startTime: 12000,
+            startTime: 1200000,
             currentTime: 0,
 
             isRunning: false,
@@ -65,8 +65,8 @@ export default {
                 this.currentTime = this.currentTime - 1000;
 
                 if(this.currentTime < 6000 && this.currentTime > 0){
-                    // var klaxon = new Audio(require("./../assets/sounds/Klaxon.wav"));
-                    // klaxon.play();                
+                    var klaxon = new Audio(require("./../assets/sounds/Klaxon.wav"));
+                    klaxon.play();                
                 }
 
                 if( this.currentTime <= 0){
