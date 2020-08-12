@@ -2,22 +2,36 @@
     <div>
         <div class="pb-4" align="center">
             <label>Chaser: 
-                <button v-if="!editChaser" class="text-xs text-green-800 hover:bg-green-800 rounded-md hover:text-white border-none w-10" @click="startEditChaser">Edit</button>
-                <button v-else class="text-xs text-green-800 hover:bg-green-800 hover:text-white border-none" @click="setChaser">Set</button>
             </label>
             <div v-if="editChaser">
-                <input class="h-4 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 focus:outline-none focus:bg-white focus:border-blue-500" v-model=editedChaser type="text"/>
+                <div>
+                    <input class="h-4 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 focus:outline-none focus:bg-white focus:border-blue-500" v-model=editedChaser type="text"/>
+                </div>
+                <div class="justify-evenly">
+                    <button class="text-xs text-green-800 hover:bg-green-800 hover:text-white border-none rounded-md w-10" @click="setChaser">Set</button>
+                    <button class="text-xs text-red-700 hover:bg-red-700 hover:text-white border-none rounded-md w-10" @click="cancelSetChaser">Cancel</button>               
+                </div>
             </div>
             <div v-else> 
                 {{ chaser }}
+                <div>
+                    <button class="text-xs text-green-800 hover:bg-green-800 rounded-md hover:text-white border-none w-10" @click="startEditChaser">Edit</button>
+                </div>                
             </div>
         </div>
         <div align="center">
             <label class="pr-2 pb-2">Player List:</label>
-            <button v-if="!addPlayer" class="text-xs text-green-800 hover:bg-green-800 rounded-md hover:text-white border-none w-20" @click="addPlayer = true">Add Player</button>
-            <button v-else class="text-xs text-green-800 hover:bg-green-800 hover:text-white border-none" @click="addPlayerToList">Save</button>
-            <div v-if="addPlayer">
-                <input class="h-4 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 focus:outline-none focus:bg-white focus:border-blue-500" v-model=player type="text"/>
+            <div v-if="!addPlayer">
+                <button class="text-xs text-green-800 hover:bg-green-800 rounded-md hover:text-white border-none w-20" @click="addPlayer = true">Add Player</button>
+            </div>
+            <div v-else>
+                <div>
+                    <input class="h-4 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 focus:outline-none focus:bg-white focus:border-blue-500" v-model=player type="text"/>
+                </div>
+                <div class="justify-evenly">
+                    <button class="text-xs text-green-800 hover:bg-green-800 hover:text-white border-none rounded-md w-10" @click="addPlayerToList">Save</button>
+                    <button class="text-xs text-red-700 hover:bg-red-700 hover:text-white border-none rounded-md w-10" @click="cancelAddPlayer">Cancel</button>                
+                </div>
             </div>
             <div v-if="players.length > 0" class="pt-2">
                 <div v-for="player in players" :key="player.id">
@@ -74,7 +88,6 @@ export default {
         addPlayerToList(){
             var playerToAdd = {};
 
-            playerToAdd.id = this.players.length + 1;
             playerToAdd.name = this.player;
             playerToAdd.count = 0;
 
@@ -82,6 +95,11 @@ export default {
 
             this.addPlayer = false;
             this.player = "";
+        },
+
+        cancelAddPlayer(){
+            this.player = "";
+            this.addPlayer = false;
         },
 
         startEditChaser(){
@@ -94,6 +112,11 @@ export default {
             this.editChaser = true;
         },
 
+        cancelSetChaser(){
+            this.editChaser = false;
+            this.editedChaser = "";
+        },
+
         setChaser(){
             this.chaser = this.editedChaser;
 
@@ -102,7 +125,31 @@ export default {
         },
 
         setNextChaser(){
-            
+            var max = {};
+
+            max.name = "";
+            max.count = -1;
+
+            this.players.forEach(player => {
+                if(player.count > max.count){
+                    max = player;
+                }
+            });
+
+            var newPlayer = {};
+
+            newPlayer.name = this.chaser;
+            newPlayer.count = 0;
+
+            this.chaser = max.name;
+
+            max.name = newPlayer.name;
+
+            this.players.forEach(player => {
+                player.count = 0;
+            });
+
+            this.isTimerFinished = false;
         }
     }
 }
