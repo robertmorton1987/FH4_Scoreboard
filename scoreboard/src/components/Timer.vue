@@ -4,12 +4,12 @@
             <div class="w-40 bg-gray-500 text-black rounded-md text-6xl">{{ timeRemaining }}</div>
         </div>
         <div class="w-full pb-4">
-            <span v-if="showStart && !isRunning"><button class="w-1/4 bg-green-700 text-white rounded-md" @click="startTimer">Start Timer</button></span>
-            <span v-else-if="showPause && isRunning"><button class="w-1/4 bg-red-700 text-white rounded-md" @click="pauseTimer">Pause Timer</button></span>
-            <span v-if="!showStart && !isRunning"><button class="w-1/4 bg-green-700 text-white rounded-md" @click="continueTimer">Continue Timer</button></span>
+            <span v-if="showStart && !isRunning"><button class="w-1/4 bg-green-700 text-white rounded-md" @click="startTimer"> <font-awesome-icon :icon="['fas', 'stopwatch']" /> Start Timer</button></span>
+            <span v-else-if="showPause && isRunning"><button class="w-1/4 bg-red-700 text-white rounded-md" @click="pauseTimer"> <font-awesome-icon :icon="['fas', 'pause-circle']" /> Pause Timer</button></span>
+            <span v-if="!showStart && !isRunning"><button class="w-1/4 bg-green-700 text-white rounded-md" @click="continueTimer"><font-awesome-icon :icon="['fas', 'play-circle']" /> Continue Timer</button></span>
         </div>
         <div v-if="isRunning || showPause" class="w-full">
-            <button class="w-1/4 text-red-700 bg-white hover:bg-red-700 hover:text-white rounded-md" @click="cancelTimer">Cancel</button>
+            <button class="w-1/4 text-red-700 bg-white hover:bg-red-700 hover:text-white rounded-md" @click="cancelTimer"> <font-awesome-icon :icon="['fas', 'ban']" /> Cancel</button>
         </div>
         <div class="pb-4">
             <Players 

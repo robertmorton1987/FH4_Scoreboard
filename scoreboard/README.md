@@ -1,4 +1,4 @@
-# scoreboard
+# FH4_Scoreboard
 
 ## Project setup
 ```
@@ -8,6 +8,11 @@ npm install
 ### Compiles and hot-reloads for development
 ```
 npm run serve
+```
+
+### Run Electron Program
+```
+npm run electron:serve
 ```
 
 ### Compiles and minifies for production

@@ -8,29 +8,29 @@
                     <input class="h-4 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 focus:outline-none focus:bg-white focus:border-blue-500" v-model=editedChaser type="text"/>
                 </div>
                 <div class="justify-evenly">
-                    <button class="text-xs text-green-800 hover:bg-green-800 hover:text-white border-none rounded-md w-10" @click="setChaser">Set</button>
-                    <button class="text-xs text-red-700 hover:bg-red-700 hover:text-white border-none rounded-md w-10" @click="cancelSetChaser">Cancel</button>               
+                    <button class="text-xs text-green-800 hover:bg-green-800 hover:text-white border-none rounded-md w-10" @click="setChaser"> <font-awesome-icon :icon="['fas', 'save']" /> Set</button>
+                    <button class="text-xs text-red-700 hover:bg-red-700 hover:text-white border-none rounded-md w-10" @click="cancelSetChaser"> <font-awesome-icon :icon="['fas', 'ban']" /> Cancel</button>               
                 </div>
             </div>
             <div v-else> 
                 {{ chaser }}
                 <div>
-                    <button class="text-xs text-green-800 hover:bg-green-800 rounded-md hover:text-white border-none w-10" @click="startEditChaser">Edit</button>
+                    <button class="text-xs text-green-800 hover:bg-green-800 rounded-md hover:text-white border-none w-20" @click="startEditChaser"> <font-awesome-icon :icon="['fas', 'car-side']" /> Edit</button>
                 </div>                
             </div>
         </div>
         <div align="center">
             <label class="pr-2 pb-2">Player List:</label>
             <div v-if="!addPlayer">
-                <button class="text-xs text-green-800 hover:bg-green-800 rounded-md hover:text-white border-none w-20" @click="addPlayer = true">Add Player</button>
+                <button class="text-xs text-green-800 hover:bg-green-800 rounded-md hover:text-white border-none w-20" @click="addPlayer = true"> <font-awesome-icon :icon="['fas', 'user-circle']" /> Add Player</button>
             </div>
             <div v-else>
                 <div>
                     <input class="h-4 bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 focus:outline-none focus:bg-white focus:border-blue-500" v-model=player type="text"/>
                 </div>
                 <div class="justify-evenly">
-                    <button class="text-xs text-green-800 hover:bg-green-800 hover:text-white border-none rounded-md w-10" @click="addPlayerToList">Save</button>
-                    <button class="text-xs text-red-700 hover:bg-red-700 hover:text-white border-none rounded-md w-10" @click="cancelAddPlayer">Cancel</button>                
+                    <button class="text-xs text-green-800 hover:bg-green-800 hover:text-white border-none rounded-md w-10" @click="addPlayerToList"> <font-awesome-icon :icon="['fas', 'save']" /> Save</button>
+                    <button class="text-xs text-red-700 hover:bg-red-700 hover:text-white border-none rounded-md w-10" @click="cancelAddPlayer"> <font-awesome-icon :icon="['fas', 'ban']" /> Cancel</button>                
                 </div>
             </div>
             <div v-if="players.length > 0" class="pt-2">
@@ -45,7 +45,7 @@
         </div>     
         <div v-if="isTimerFinished" class="content-center">
             <button class="h-4 w-1/4 rounded-md text-xs bg-gray-700 text-white hover:text-gray-700 hover:bg-white hover:font-bold" @click="setNextChaser">
-                Set Next Chaser
+                <font-awesome-icon :icon="['fas', 'search']" /> Set Next Chaser
             </button>
         </div>   
     </div>
