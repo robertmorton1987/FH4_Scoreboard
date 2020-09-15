@@ -69,14 +69,20 @@ export default {
             type: Boolean,
             required: false,
             default: false
+        },
+        players: {
+            type: Array,
+            required: true,
+        },
+        chaser: {
+            type: String,
+            required: true,
         }
     },
 
     data(){
         return {
-            chaser: "None Selected",
             editedChaser: "",
-            players: [],
             player: null,
 
             editChaser: false,
@@ -118,10 +124,12 @@ export default {
         },
 
         setChaser(){
+            this.$root.$emit('changeChaser', this.editedChaser)
+
             this.chaser = this.editedChaser;
 
             this.editChaser = false;
-            this.editedChaser = "";
+            this.editedChaser = "";            
         },
 
         setNextChaser(){
@@ -141,7 +149,9 @@ export default {
             newPlayer.name = this.chaser;
             newPlayer.count = 0;
 
+            this.$emit('changeChaser', max.name);
             this.chaser = max.name;
+
 
             max.name = newPlayer.name;
 

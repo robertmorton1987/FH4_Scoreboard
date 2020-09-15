@@ -1,43 +1,57 @@
 <template>
     <div class="w-full" align="center">
         <div class="flex w-full pb-4">
-            <div class="flex w-1/3 justify-center items-end px-4">
-                <div class="flex text-xs font-bold text-gray-600">
+            <div class="flex w-1/3 items-center justify-center px-4">
+                <div class="flex w-1/2  text-xs font-bold text-gray-600">
                     Car class (Chaser/Player):                              
                 </div>         
-            </div>
-            <div class="flex w-1/3 bg-gray-500 text-black rounded-md text-6xl justify-center">{{ timeRemaining }}</div>
-            <div class="flex w-1/3 justify-center items-end px-4">
-                <div class="flex text-xs font-bold text-gray-600">
-                    Location:                              
-                </div>         
-            </div>
-        </div>
-        <div class="flex w-full">
-            <div class="flex w-1/3">
-                <div class="flex w-full mx-2">
+                <div class="flex w-1/2 mx-2">
                     <select class="h-10 items-center text-sm block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline" v-model="carClass">
-                        <option value="">Select a Car Class</option>
+                        <option value="">Select</option>
                         <option v-for="option in carClasses" v-bind:key="option.value" >
                             {{ option.text }}
                         </option>
                     </select>            
-                </div>            
+                </div>                 
+            </div>
+            <div class="flex w-1/3 bg-gray-500 text-black rounded-md text-6xl justify-center">{{ timeRemaining }}</div>
+            <div class="flex w-1/3 items-center justify-center px-4">
+                <div class="flex row w-1/5 mx-2 items-center">
+                    <div class="flex text-xs font-bold text-gray-600">
+                        Location:                              
+                    </div>                         
+                </div>
+                <div class="flex row w-4/5 mx-2">
+                    <select class="h-10 items-center text-sm block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline" v-model="location">
+                        <option value="">Location</option>
+                        <option v-for="option in locations" v-bind:key="option.value">
+                            {{ option.text }}
+                        </option>
+                    </select>            
+                </div>                     
+            </div>
+        </div>
+        <div class="flex w-full">
+            <div class="flex w-1/3 justify-center items-center">
+                <label class="w-full block text-gray-500 font-bold">
+                    <input class="mr-2 leading-tight" type="checkbox" v-model="useStock">
+                    <span class="text-xs">
+                        Chasers Use Stock Vehicles
+                    </span>
+                </label> 
             </div>
             <div class="flex w-1/3 justify-center">
                 <div v-if="showStart && !isRunning" class="w-full mx-2"><button class="w-full bg-green-700 text-white rounded-md" @click="startTimer"> <font-awesome-icon :icon="['fas', 'stopwatch']" /> Start Timer</button></div>
                 <div v-if="showPause && isRunning" class="w-full mx-2"><button class="w-full bg-red-700 text-white rounded-md" @click="pauseTimer"> <font-awesome-icon :icon="['fas', 'pause-circle']" /> Pause Timer</button></div>
                 <div v-if="!showStart && !isRunning" class="w-full mx-2"><button class="w-full bg-green-700 text-white rounded-md" @click="continueTimer"><font-awesome-icon :icon="['fas', 'play-circle']" /> Continue Timer</button></div>
             </div>
-            <div class="flex w-1/3 justify-center">
-                <div class="flex w-full mx-2">
-                    <select class="h-10 items-center text-sm block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline" v-model="location">
-                        <option value="">Select a Location</option>
-                        <option v-for="option in locations" v-bind:key="option.value">
-                            {{ option.text }}
-                        </option>
-                    </select>            
-                </div>            
+            <div class="flex w-1/3 items-center justify-center">
+                <label class="w-full block text-gray-500 font-bold">
+                    <input class="mr-2 leading-tight" type="checkbox" v-model="useSimulation">
+                    <span class="text-xs">
+                        Use Simulation Damage
+                    </span>
+                </label>  
             </div>
         </div>
         <div v-if="isRunning || showPause" class="w-full">
@@ -46,12 +60,17 @@
         <div class="pb-4">
             <Players 
                 :timerRunning="isRunning"
-                :isTimerFinished="isFinished" />
+                :isTimerFinished="isFinished"
+                :players="players"
+                :chaser="chaser" />
         </div>          
+        <div class="pb-4" v-if="!isRunning">
+            <button @click="saveData">Save</button>
+        </div>
     </div>
 </template>
 
-<script>
+ <script>
 import Players from './Players.vue'
 
 export default {
@@ -63,6 +82,10 @@ export default {
             timeRemaining: "",
             carClass: "",
             location: "",
+            players: [],
+            chaser: "",            
+            useStock: false,
+            useSimulation: false,            
 
             carClasses: [
                 { text: "C/D", value: "C/D" },
@@ -93,6 +116,10 @@ export default {
     created() {
         this.showStart = true;
         this.timeRemaining = "20:00";
+
+        this.$root.$on("changeChaser", name => {
+            this.chaser = name;
+        });        
     },
     
     methods: {
@@ -160,7 +187,27 @@ export default {
             this.timeRemaining = "20:00"
 
             clearInterval(this.timer);
-        }
+        },
+
+        saveData(){
+            var msg = "";
+
+            msg += "Car Class: " + this.carClass;
+            msg += " \nLocation: " + this.location;
+            msg += " \nChaser Use Stock: " + this.useStock;
+            msg += " \nSimulation Damage: " + this.useSimulation;
+
+            this.players.forEach((player) => {
+                msg += " \nPlayer: " + player.name;
+                msg += " Count: " + player.count;
+            })
+
+            msg += " \nChaser: " + this.chaser;
+            
+            alert(msg);
+
+            //Todo - Turn this into JSON object and store to txt file. 
+        }     
     }
 }
 </script>
