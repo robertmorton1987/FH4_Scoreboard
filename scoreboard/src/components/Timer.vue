@@ -41,9 +41,9 @@
                 </label> 
             </div>
             <div class="flex w-1/3 justify-center">
-                <div v-if="showStart && !isRunning" class="w-full mx-2"><button class="w-full bg-green-700 text-white rounded-md" @click="startTimer"> <font-awesome-icon :icon="['fas', 'stopwatch']" /> Start Timer</button></div>
-                <div v-if="showPause && isRunning" class="w-full mx-2"><button class="w-full bg-red-700 text-white rounded-md" @click="pauseTimer"> <font-awesome-icon :icon="['fas', 'pause-circle']" /> Pause Timer</button></div>
-                <div v-if="!showStart && !isRunning" class="w-full mx-2"><button class="w-full bg-green-700 text-white rounded-md" @click="continueTimer"><font-awesome-icon :icon="['fas', 'play-circle']" /> Continue Timer</button></div>
+                <div v-if="showStart && !isRunning" class="w-full mx-2 pb-2"><button class="w-full bg-green-700 text-white hover:text-green-700 hover:bg-white rounded-md" @click="startTimer"> <font-awesome-icon :icon="['fas', 'stopwatch']" /> Start Timer</button></div>
+                <div v-if="showPause && isRunning" class="w-full mx-2 pb-2"><button class="w-full text-red-700 bg-white hover:bg-red-700 hover:text-white rounded-md" @click="pauseTimer"> <font-awesome-icon :icon="['fas', 'pause-circle']" /> Pause Timer</button></div>
+                <div v-if="!showStart && !isRunning" class="w-full mx-2 pb-2"><button class="w-full bg-green-700 text-white hover:text-green-700 hover:bg-white rounded-md" @click="continueTimer"><font-awesome-icon :icon="['fas', 'play-circle']" /> Continue Timer</button></div>
             </div>
             <div class="flex w-1/3 items-center justify-center">
                 <label class="w-full block text-gray-500 font-bold">
@@ -64,7 +64,7 @@
                 :players="players"
                 :chaser="chaser" />
         </div>          
-        <div class="pb-4" v-if="!isRunning">
+        <div class="pb-4" v-if="isFinished">
             <button @click="saveData">Save</button>
         </div>
     </div>
@@ -101,7 +101,8 @@ export default {
                 { text: "Edinburgh", value: "E" }
             ],
 
-            startTime: 1200000,
+            //startTime: 1200000,
+            startTime: 10000,
             currentTime: 0,
 
             isRunning: false,
@@ -115,7 +116,8 @@ export default {
     },    
     created() {
         this.showStart = true;
-        this.timeRemaining = "20:00";
+        // this.timeRemaining = "20:00";
+        this.timeRemaining = "00:10"
 
         this.$root.$on("changeChaser", name => {
             this.chaser = name;
@@ -140,10 +142,10 @@ export default {
             {
                 this.currentTime = this.currentTime - 1000;
 
-                if(this.currentTime < 6000 && this.currentTime > 0){
-                    var klaxon = new Audio(require("./../assets/sounds/Klaxon.wav"));
-                    klaxon.play();                
-                }
+                // if(this.currentTime < 6000 && this.currentTime > 0){
+                //     var klaxon = new Audio(require("./../assets/sounds/Klaxon.wav"));
+                //     klaxon.play();                
+                // }
 
                 if( this.currentTime <= 0){
                     this.timeRemaining = "00:00";
@@ -152,6 +154,8 @@ export default {
                     this.showPause = false;
                     this.isRunning = false;
                     this.isFinished = true;
+
+                    clearInterval(this.timer);
                 } else {
                     var minutes = Math.floor((this.currentTime % (1000 * 60 * 60)) / (1000 * 60));
                     var seconds = Math.floor((this.currentTime % (1000 * 60)) / 1000);
@@ -183,8 +187,10 @@ export default {
             this.showPause = false;
             this.isRunning = false;
 
-            this.startTime = 1200000;
-            this.timeRemaining = "20:00"
+            // this.startTime = 1200000;
+            // this.timeRemaining = "20:00"
+            this.startTime = 10000;
+            this.timeRemaining = "00:10"
 
             clearInterval(this.timer);
         },
