@@ -199,21 +199,24 @@ export default {
             var msg = "";
 
             msg += "Car Class: " + this.carClass;
-            msg += " \nLocation: " + this.location;
-            msg += " \nChaser Use Stock: " + this.useStock;
-            msg += " \nSimulation Damage: " + this.useSimulation;
+            msg += " Location: " + this.location;
+            msg += " Chaser Use Stock: " + this.useStock;
+            msg += " Simulation Damage: " + this.useSimulation;
 
             this.players.forEach((player) => {
-                msg += " \nPlayer: " + player.name;
-                msg += " Count: " + player.count;
+                msg += " Player: " + player.name;
+                msg += " - Tag Count: " + player.count;
             })
 
-            msg += " \nChaser: " + this.chaser;
-            
-            alert(msg);
+            msg += " Chaser: " + this.chaser;
 
-            //Todo - Turn this into JSON object and store to txt file. 
+            var json = JSON.stringify(msg);
+
+            alert(json);
+
+            //Todo - Find a way to store this... For Now - only store previous game.
         }     
     }
 }
 </script>
+
